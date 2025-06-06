@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  redis:
+    image: redis:7.0
+    container_name: redis
+    restart: always
+    ports:
+      - "127.0.0.1:6379:6379"
+    command: >
+      redis-server
+      --maxmemory 1024mb
+      --maxmemory-policy noeviction
+      --appendonly yes
+      --notify-keyspace-events Ex
+      --appendfsync everysec
+  redisinsights:
+    image: redis/redisinsight:2.68
+    container_name: redisinsights-kuryer
+    restart: always
+    ports:
+      - "5540:5540"
+    environment:
+      - RI_REDIS_HOST=redis
+      - RI_REDIS_PORT=6379
