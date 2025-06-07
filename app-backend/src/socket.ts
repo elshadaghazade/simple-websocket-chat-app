@@ -5,7 +5,7 @@ import { Server } from "http";
 export default async function setupSocket(server: Server) {
     const io = await initializeSocket(server);
 
-    io.on("connection", chatHandler);
+    io.on("connection", socket => chatHandler(socket, io));
 
     return io;
 }

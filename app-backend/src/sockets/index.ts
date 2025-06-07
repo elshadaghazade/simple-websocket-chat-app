@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { IMessagePayload } from "./types";
 import { sendMessageController } from "./controller";
 
@@ -6,7 +6,7 @@ const messages: IMessagePayload[] = [];
 
 
 
-export default async function chatHandler(socket: Socket) {
+export default async function chatHandler(socket: Socket, io: Server) {
     socket.on("join_room", async ({ room }: { room: string }) => {
         socket.join(room);
 
@@ -18,7 +18,7 @@ export default async function chatHandler(socket: Socket) {
                             userId: data.userId,
                             message: data.message
                         }, messages);
-                        socket.to(room).emit('accept_message', {
+                        io.to(room).emit('accept_message', {
                             userId: data.userId,
                             message: data.message
                         });
